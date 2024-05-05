@@ -7,18 +7,6 @@ terraform {
   }
 }
 
-# Create the OIDC Provider Object
-resource "aws_iam_openid_connect_provider" "github" {
-  url = "https://token.actions.githubusercontent.com"
-
-  client_id_list = [
-    "sts.amazonaws.com",
-  ]
-
-  thumbprint_list = var.openid_thumbprints
-}
-
-
 # Outline a Trust Policy and create a role with it
 data "aws_iam_policy_document" "github" {
   statement {
@@ -30,7 +18,7 @@ data "aws_iam_policy_document" "github" {
 
     principals {
       type        = "Federated"
-      identifiers = [aws_iam_openid_connect_provider.github.arn]
+      identifiers = [var.openid_provider_arn]
     }
 
     condition {

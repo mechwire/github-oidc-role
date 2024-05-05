@@ -11,14 +11,26 @@ terraform {
   }
 }
 
-provider "aws" {}
 
+# Create the OIDC Provider Object
+resource "aws_iam_openid_connect_provider" "github" {
+  url = "https://token.actions.githubusercontent.com"
+
+  client_id_list = [
+    "sts.amazonaws.com",
+  ]
+
+  thumbprint_list = [var.github_openid_thumbprint]
+}
+
+
+# Create a role that is accessible via the GitHub IDP
 module "github_oidc_role" {
-  source             = "./github_oidc_role"
-  role_name          = "github_infra_role_provisioner"
-  openid_thumbprints = [var.github_openid_thumbprint]
-  organization       = var.organization
-  repository         = "*"
+  source              = "./github_oidc_role"
+  role_name           = "github_infra_role_provisioner"
+  openid_provider_arn = aws_iam_openid_connect_provider.github.arn
+  organization        = var.organization
+  repository          = "*"
 }
 
 // This role can create other roles, but the created roles must have a repository tag

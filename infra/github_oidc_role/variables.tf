@@ -1,6 +1,6 @@
-variable "openid_thumbprints" {
-  type        = list(string)
-  description = "the signature for the certificate used for the IdP (in this case, GitHub). It's technically not needed because AWS and GitHub have already shared them, but Terraform requires it."
+variable "openid_provider_arn" {
+  type        = string
+  description = "the ARN of the OpenID provider (in this case, GitHub)."
   sensitive   = true
 }
 
