@@ -11,6 +11,8 @@ terraform {
   }
 }
 
+provider "aws" {}
+
 module "github_oidc_role" {
   source             = "./github_oidc_role"
   role_name          = "github_infra_role_provisioner"
