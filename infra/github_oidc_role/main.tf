@@ -10,7 +10,7 @@ terraform {
 # Outline a Trust Policy and create a role with it
 data "aws_iam_policy_document" "github" {
   statement {
-    sid = "1"
+    sid = "GitHubActionsOIDCAuth"
 
     actions = [
       "sts:AssumeRoleWithWebIdentity",

@@ -15,6 +15,6 @@ variable "repository" {
 }
 
 variable "role_name" {
-  description = "the name of the role created, that can be assumed via OIDC with GitHub"
+  description = "the name of the role to be created, that can be assumed via OIDC with GitHub"
   type        = string
 }
