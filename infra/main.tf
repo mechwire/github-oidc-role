@@ -3,6 +3,7 @@
 # Create a role for that provider which allows it to create other roles
 
 terraform {
+  backend "s3" {}
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -60,3 +61,4 @@ resource "aws_iam_role_policy_attachment" "role_creation" {
   role       = module.github_oidc_role.name
   policy_arn = aws_iam_policy.role_creation.arn
 }
+
