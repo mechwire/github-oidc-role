@@ -1,3 +1,0 @@
-key = "github-oidc-role"
-bucket = "tf-state20240505213213392700000001"
-dynamodb_table = "tf-state-lock"
