@@ -1,6 +1,5 @@
 # github-oidc-role
 
-
 This creates an AWS role that can be assumed during a GitHub Actions flow.
 
 It's meant to be more secure, as short-lived credentials are issued.
@@ -30,17 +29,20 @@ As long as the tag is not used on things they shouldn't access, they are correct
 ## Quirks
 * GitHub and AWS have shared the OpenID thumbprints ahead of time. However, the TF resource to create the OIDC Provider requires it.
     * I got the thumbprint by configuring the OIDC provider in the UI, as outlined in [AWS's article on the GitHub Actions OIDC integration with AWS]. It's not "correct" but was the easiest way.
+* ABAC is not universally supported across resources
 
 
 # Execution
 
-* You need to already have an AWS role to run the tf code.
+1. You need to already have an AWS role to run the tf code.
+2. Execute `infra/openid_provider`
+3. Execute `infra`
 
 ## Validating Outcomes
 
 You should have
-* a new role under `IAM > Roles`
 * a new Identity Provider under `IAM > Identity providers`
+* a new role under `IAM > Roles`
 
 
 # Resources
@@ -48,11 +50,13 @@ You should have
 * [GitHub's article on the GitHub Actions OIDC integration with AWS](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services)
 * [AWS ABAC]
 * [AWS Required Tags]
+* [AWS docs - "Grant permission to tag resources during creation"]
 
 <!-- Links -->
 [AWS's article on the GitHub Actions OIDC integration with AWS]: https://aws.amazon.com/blogs/security/use-iam-roles-to-connect-github-actions-to-actions-in-aws/
 [AWS ABAC]: https://docs.aws.amazon.com/IAM/latest/UserGuide/tutorial_attribute-based-access-control.html
 [AWS Required Tags]: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_iam-new-user-tag.html
+[AWS docs - "Grant permission to tag resources during creation"]: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/supported-iam-actions-tagging.html
 
 
 
