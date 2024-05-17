@@ -21,17 +21,51 @@ resource "aws_iam_openid_connect_provider" "github" {
     "sts.amazonaws.com",
   ]
 
-  thumbprint_list = [var.github_openid_thumbprint]
+  thumbprint_list = ["xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"] # This gets ignored by AWS anyway
 }
 
 
-# Create a role that is accessible via the GitHub IDP
-module "github_oidc_role" {
-  source              = "./github_oidc_role"
-  role_name           = "github_infra_role_provisioner"
-  openid_provider_arn = aws_iam_openid_connect_provider.github.arn
-  organization        = var.organization
-  repository          = "*"
+# Create a role that is accessible via the GitHub IDP, in all repositories
+data "aws_iam_policy_document" "github" {
+  statement {
+    sid = "GitHubActionsOIDCAuth"
+
+    actions = [
+      "sts:AssumeRoleWithWebIdentity",
+    ]
+
+    principals {
+      type        = "Federated"
+      identifiers = [aws_iam_openid_connect_provider.github.arn]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "token.actions.githubusercontent.com:aud"
+
+      values = [
+        "sts.amazonaws.com",
+      ]
+    }
+
+    condition {
+      test     = "StringLike"
+      variable = "token.actions.githubusercontent.com:sub"
+
+      values = [
+        "repo:${var.organization}/*:*"
+      ]
+    }
+  }
+}
+
+resource "aws_iam_role" "github" {
+  name               = "github_infra_role_provisioner"
+  assume_role_policy = data.aws_iam_policy_document.github.json
+
+  tags = {
+    github = true,
+  }
 }
 
 // This role can create other roles, but the created roles must have a repository tag
@@ -58,7 +92,7 @@ resource "aws_iam_policy" "role_creation" {
 }
 
 resource "aws_iam_role_policy_attachment" "role_creation" {
-  role       = module.github_oidc_role.name
+  role       = aws_iam_role.github.name
   policy_arn = aws_iam_policy.role_creation.arn
 }
 
