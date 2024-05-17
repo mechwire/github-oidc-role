@@ -13,8 +13,3 @@ variable "repository" {
   description = "the name of the repository on GitHub (e.g., 'project' in user/project)"
   type        = string
 }
-
-variable "role_name" {
-  description = "the name of the role to be created, that can be assumed via OIDC with GitHub"
-  type        = string
-}
