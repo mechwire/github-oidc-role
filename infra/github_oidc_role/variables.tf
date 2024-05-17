@@ -9,7 +9,7 @@ variable "organization" {
   type        = string
 }
 
-variable "repository" {
+variable "repository_name" {
   description = "the name of the repository on GitHub (e.g., 'project' in user/project)"
   type        = string
 }

@@ -35,18 +35,18 @@ data "aws_iam_policy_document" "github" {
       variable = "token.actions.githubusercontent.com:sub"
 
       values = [
-        "repo:${var.organization}/${var.repository}:*"
+        "repo:${var.organization}/${var.repository_name}:*"
       ]
     }
   }
 }
 
 resource "aws_iam_role" "github" {
-  name               = "github_infra_${var.repository}"
+  name               = "github_infra_${var.repository_name}"
   assume_role_policy = data.aws_iam_policy_document.github.json
 
   tags = {
     github     = true,
-    repository = var.repository,
+    repository = var.repository_name,
   }
 }
