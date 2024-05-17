@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "github" {
 
     principals {
       type        = "Federated"
-      identifiers = [var.openid_provider_arn]
+      identifiers = ["arn:aws:iam::${var.aws_account_id}:oidc-provider/token.actions.githubusercontent.com"]
     }
 
     condition {

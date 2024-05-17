@@ -1,6 +1,6 @@
-variable "openid_provider_arn" {
+variable "aws_account_id" {
   type        = string
-  description = "the ARN of the OpenID provider (in this case, GitHub)."
+  description = "the account ID used in many ARNs."
   sensitive   = true
 }
 
