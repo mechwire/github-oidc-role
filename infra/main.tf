@@ -72,7 +72,7 @@ resource "aws_iam_role" "github" {
 data "aws_iam_policy_document" "role_creation" {
   statement {
     effect    = "Allow"
-    actions   = ["iam:CreateRole", "iam:TagRole"]
+    actions   = ["iam:CreateRole", "iam:TagRole", "iam:ListPolicies"]
     resources = ["*"]
     condition {
       test     = "ForAllValues:StringEquals"
